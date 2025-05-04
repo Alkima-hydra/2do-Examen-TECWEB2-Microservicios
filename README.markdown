@@ -1,4 +1,4 @@
-# Microservicio MIGA: Normativas de Alimentación Saludable
+# Microservicio MIGA: Normativas de Alimentación Saludable, filtrado de archivos
 
 ## Descripción
 
@@ -6,7 +6,7 @@ Este microservicio, desarrollado para el módulo MIGA, proporciona una interfaz 
 
 ### Objetivo
 
-Facilitar el acceso a normativas vigentes sobre alimentación saludable mediante una API flexible y la generación de informes estructurados, permitiendo a comunidades escolares y la academia de MIGA consultar información relevante y transferir conocimientos.
+Construir un microservicio para que usuarios MIGA puedan consultar y filtrar documentos normativos del proyecto integrador, así como generar informes en formato PDF basados en criterios de búsqueda específicos.
 
 ### Tecnologías Utilizadas
 
@@ -109,7 +109,7 @@ Recupera una lista de documentos filtrados según criterios especificados.
 **Ejemplo de consulta**:
 ```graphql
 query {
-  documentos(filter: { tipo: "ley", anio: 2023, orderBy: "nombre", orderDirection: "ASC" }) {
+  documentos(filter: { tipo: "Ley", anio: 2023, orderBy: "nombre", orderDirection: "ASC" }) {
     id_documento
     nombre
     tipo
@@ -134,7 +134,7 @@ query {
       {
         "id_documento": 1,
         "nombre": "Ley de Alimentación Saludable",
-        "tipo": "ley",
+        "tipo": "Ley",
         "fuente_origen": "Constitución Política del Estado",
         "anio_publicacion": "2023",
         "aplicacion": "Nacional"
@@ -151,7 +151,7 @@ Genera un informe PDF con los documentos filtrados y campos seleccionados.
 ```graphql
 mutation {
   generarReportePDF(
-    filter: { tipo: "ley" }
+    filter: { tipo: "Ley" }
     fields: ["nombre", "tipo", "anio_publicacion"]
   ) {
     fileName
@@ -196,19 +196,46 @@ Permite descargar los informes PDF generados.
 
 ## Estructura de Archivos
 
-La siguiente tabla describe los archivos y directorios principales del proyecto:
+La estructura del proyecto refleja una organización modular basada en la imagen proporcionada:
 
-| Archivo/Directorio | Descripción |
-|--------------------|-------------|
-| `config.js` | Configuración de variables de entorno (`PORT`, `REST_API_URL`). |
-| `graphql/index.js` | Resolutores GraphQL para consultas y mutaciones. |
-| `graphql/documentSchema.js` | Esquema GraphQL con tipos, consultas y mutaciones. |
-| `services/DocumentService.js` | Lógica para consumir la API REST y filtrar documentos. |
-| `utils/PDFGenerator.js` | Generación de informes PDF con PDFKit. |
-| `controllers/downloadController.js` | Gestión del endpoint de descarga de PDFs. |
-| `index.js` | Punto de entrada del servidor (Express + Apollo Server). |
-| `Uploads/` | Directorio temporal para almacenar PDFs generados. |
-| `evidencias/` | Carpeta para capturas de pantalla y videos de pruebas (crear si es necesario). |
+/Microservicio
+├── node_modules/
+├── src/
+│   ├── assets/
+│   │   └── miga-24.png
+│   ├── config/
+│   │   └── index.js
+│   ├── controllers/
+│   │   └── downloadController.js
+│   ├── graphql/
+│   │   ├── resolvers.js
+│   │   └── schema.js
+│   ├── services/
+│   │   └── documentService.js
+│   ├── utils/
+│   │   └── pdfGenerator.js
+│   └── index.js
+├── Uploads/
+│   └── reporte_documentos_174.pdf
+├── .env
+├── .gitignore
+├── package-lock.json
+└── package.json
+
+- **node_modules/**: Dependencias instaladas por npm (excluido en `.gitignore`).
+- **src/assets/miga-24.png**: Imagen utilizada como logo en los informes PDF.
+- **src/config/index.js**: Configuración de variables de entorno (`PORT`, `REST_API_URL`).
+- **src/controllers/downloadController.js**: Lógica para servir archivos PDF desde el endpoint `/download`.
+- **src/graphql/resolvers.js**: Implementa la lógica de las consultas (`documentos`) y mutaciones (`generarReportePDF`).
+- **src/graphql/schema.js**: Define el esquema GraphQL con tipos (`Document`, `PDFGenerationResponse`) y operaciones.
+- **src/services/documentService.js**: Encapsula el consumo de la API REST y el filtrado de documentos.
+- **src/utils/pdfGenerator.js**: Genera informes PDF con PDFKit, incluyendo tablas y estilos.
+- **src/index.js**: Punto de entrada que inicializa el servidor Express y Apollo Server.
+- **Uploads/**: Directorio temporal para almacenar PDFs generados.
+- **.env**: Archivo de configuración de entorno (excluido en `.gitignore`).
+- **.gitignore**: Lista de archivos y carpetas a ignorar en el control de versiones.
+- **package-lock.json**: Registro de versiones exactas de las dependencias.
+- **package.json**: Configuración del proyecto, incluyendo dependencias y scripts.
 
 ## Endpoint Externo
 
