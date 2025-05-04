@@ -1,0 +1,829 @@
+openapi: 3.0.3
+info:
+  title: Documentación API proyecto Integrador MIGA
+  description: API para manejar el usuarios, documentos, comentarios y propuestas ciudadanas de MIGA.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor local
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id_usuario:
+          type: integer
+          example: 1
+        tipo:
+          type: string
+          example: admin
+        correo:
+          type: string
+          example: user@example.com
+        contrasenia:
+          type: string
+          example: 123456
+        isDeleted:
+          type: boolean
+          example: true
+      required:
+        - id_usuario
+        - correo
+        - tipo
+        - contrasenia
+    Documento:
+      type: object
+      properties:
+        id_documento:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: Primer documento
+        tipo:
+          type: string
+          example: Reporte
+        fuente_origen:
+          type: string
+          example: Investigación
+        descripcion:
+          type: string
+          example: Descripción del documento
+        importancia:
+          type: string
+          example: Alta
+        anio_publicacion:
+          type: string
+          format: date
+          example: 2023-01-01
+        enlace:
+          type: string
+          format: uri
+          example: https://example.com/doc
+        alcance:
+          type: string
+          example: Nacional
+        concepto_basico:
+          type: string
+          example: Concepto principal
+        USUARIO_id_usuario:
+          type: integer
+          example: 1
+        isfavorite:
+          type: boolean
+          example: false
+        aplicacion:
+          type: string
+          example: Investigación
+        cpe:
+          type: string
+          example: CPE datos
+        jerarquia:
+          type: string
+          example: Primaria
+        isDeleted:
+          type: boolean
+          example: false
+        vistas:
+          type: integer
+          example: 10
+        palabras_clave_procesadas:
+          type: string
+          example: clave1,clave2,clave3
+        usuario:
+          $ref: '#/components/schemas/Usuario'
+      required:
+        - nombre
+        - tipo
+        - fuente_origen
+        - descripcion
+        - importancia
+        - anio_publicacion
+        - enlace
+        - alcance
+        - concepto_basico
+        - aplicacion
+        - cpe
+        - jerarquia
+        - USUARIO_id_usuario
+    VersionDocumento:
+      type: object
+      properties:
+        id_version:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: Reporte
+        tipo:
+          type: string
+          example: Reporte
+        fuente_origen:
+          type: string
+          example: Investigación
+        descripcion:
+          type: string
+          example: Descripción de la versión
+        importancia:
+          type: string
+          example: Alta
+        anio_publicacion:
+          type: string
+          format: date
+          example: 2023-01-01
+        enlace:
+          type: string
+          format: uri
+          example: https://example.com/doc
+        alcance:
+          type: string
+          example: Nacional
+        concepto_basico:
+          type: string
+          example: Concepto principal
+        isfavorite:
+          type: boolean
+          example: false
+        aplicacion:
+          type: string
+          example: Investigación
+        cpe:
+          type: string
+          example: CPE datos
+        jerarquia:
+          type: string
+          example: Primaria
+        isVersion:
+          type: boolean
+          example: true
+        vistas:
+          type: integer
+          example: 10
+        DOCUMENTO_id_documento:
+          type: integer
+          example: 1
+        USUARIO_id_usuario:
+          type: integer
+          example: 1
+        fecha_version:
+          type: string
+          format: date-time
+          example: 2023-01-01T12:00:00Z
+        numero_version:
+          type: integer
+          example: 1
+        palabras_clave_procesadas:
+          type: string
+          example: clave1,clave2
+        usuario:
+          $ref: '#/components/schemas/Usuario'
+        documento:
+          type: object
+          properties:
+            id_documento:
+              type: integer
+              example: 1
+            tipo:
+              type: string
+              example: Reporte
+      required:
+        - id_version
+        - DOCUMENTO_id_documento
+        - USUARIO_id_usuario
+        - fecha_version
+        - numero_version
+        - nombre
+        - tipo
+        - fuente_origen
+        - descripcion
+        - importancia
+        - anio_publicacion
+        - enlace
+        - alcance
+        - concepto_basico
+        - aplicacion
+        - cpe
+        - jerarquia
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: false
+        msg:
+          type: string
+          example: Error message
+      required:
+        - ok
+        - msg
+paths:
+  /documentos:
+    get:
+      summary: Obtener todos los documentos
+      tags:
+        - Documentos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de documentos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  documentos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Documento'
+        '500':
+          description: error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Crear un nuevo documento
+      tags:
+        - Documentos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Primer documento
+                tipo:
+                  type: string
+                  example: Reporte
+                fuente_origen:
+                  type: string
+                  example: Investigación
+                descripcion:
+                  type: string
+                  example: Descripción del documento
+                importancia:
+                  type: string
+                  example: Alta
+                anio_publicacion:
+                  type: string
+                  format: date
+                  example: 2023-01-01
+                enlace:
+                  type: string
+                  format: uri
+                  example: https://example.com/doc
+                alcance:
+                  type: string
+                  example: Nacional
+                concepto_basico:
+                  type: string
+                  example: Concepto principal
+                aplicacion:
+                  type: string
+                  example: Investigación
+                cpe:
+                  type: string
+                  example: CPE datos
+                jerarquia:
+                  type: string
+                  example: Primaria
+                palabras_clave_procesadas:
+                  type: string
+                  example: clave1,clave2
+              required:
+                - tipo
+                - fuente_origen
+      responses:
+        '201':
+          description: Documento creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  documento:
+                    $ref: '#/components/schemas/Documento'
+        '400':
+          description: Campo faltante o inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /documentos/{id}:
+    get:
+      summary: Get a document by ID
+      tags:
+        - Documentos
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del documento
+      responses:
+        '200':
+          description: Detalles del documento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  documento:
+                    $ref: '#/components/schemas/Documento'
+        '404':
+          description: Documento no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a document
+      tags:
+        - Documentos
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID documento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  example: Documento actualizado
+                tipo:
+                  type: string
+                  example: Reporte
+                fuente_origen:
+                  type: string
+                  example: Investigación
+                descripcion:
+                  type: string
+                  example: Descripción actualizada
+                importancia:
+                  type: string
+                  example: Media
+                anio_publicacion:
+                  type: string
+                  format: date
+                  example: 2023-01-01
+                enlace:
+                  type: string
+                  format: uri
+                  example: https://example.com/doc
+                alcance:
+                  type: string
+                  example: Internacional
+                concepto_basico:
+                  type: string
+                  example: Concepto actualizado
+                isfavorite:
+                  type: boolean
+                  example: true
+                aplicacion:
+                  type: string
+                  example: Investigación
+                cpe:
+                  type: string
+                  example: CPE datos
+                jerarquia:
+                  type: string
+                  example: Secundaria
+                palabras_clave_procesadas:
+                  type: string
+                  example: clave1,clave2
+      responses:
+        '200':
+          description: Document updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  documento:
+                    $ref: '#/components/schemas/Documento'
+        '403':
+          description: Sin permisos para editar el documento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Documento no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: borrado logico de un documento
+      tags:
+        - Documentos
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID documento
+      responses:
+        '200':
+          description: Documento eliminado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Documento eliminado correctamente
+        '403':
+          description: Sin autorizacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Documento no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /versiones/documento/{id}:
+    get:
+      summary: Obtener todas las versiones de un documento
+      tags:
+        - Versiones
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID documento
+      responses:
+        '200':
+          description: Lista de versiones del documento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  versiones:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VersionDocumento'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /versiones/documento/{id}/version/{versionId}:
+    get:
+      summary: Obtener una versión específica de un documento
+      tags:
+        - Versiones
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID documento
+        - in: path
+          name: versionId
+          required: true
+          schema:
+            type: integer
+          description: Version ID
+      responses:
+        '200':
+          description: detalles de la version
+          content:
+            appliccation/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  version:
+                    $ref: '#/components/schemas/VersionDocumento'
+        '404':
+          description: Versión o documento no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /versiones/documento/{id}/version/{versionId}/restaurar:
+    post:
+      summary: Restaurar una versión específica de un documento
+      tags:
+        - Versiones
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID documento
+        - in: path
+          name: versionId
+          required: true
+          schema:
+            type: integer
+          description: Version ID
+      responses:
+        '200':
+          description: Version restaurada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  documento:
+                    $ref: '#/components/schemas/Documento'
+        '403':
+          description: Sin autorizacion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: version o documento no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /usuarios:
+    post:
+      summary: Logueo de un usuario
+      tags:
+        - Autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                  format: email
+                  example: user@example.com
+                contrasenia:
+                  type: string
+                  example: password123
+              required:
+                - correo
+                - contrasenia
+      responses:
+        '200':
+          description: Logueado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '400':
+          description: credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Obtener todos los usuarios activos
+      tags:
+        - Usuarios
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuarios activos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Sin autorización
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /usuarios/new:
+    post:
+      summary: Crear un nuevo usuario
+      tags:
+        - Autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                  format: email
+                  example: user@example.com
+                contrasenia:
+                  type: string
+                  example: password123
+                tipo:
+                  type: string
+                  example: admin
+              required:
+                - correo
+                - contrasenia
+                - tipo
+      responses:
+        '201':
+          description: Usuario creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '400':
+          description: Email ya registrado o campo faltante
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /usuarios/renew:
+    get:
+      summary: Revalidar el token de acceso
+      tags:
+        - Autenticación
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Token renovado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Token inválido o expirado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /usuarios/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      tags:
+        - Usuarios
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '200':
+          description: Detalles del usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: no autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+tags:
+  - name: Documentos
+    description: Operaciones relacionadas con la gestión de documentos
+  - name: Usuarios
+    description: Operaciones relacionadas con la gestión de usuarios
+  - name: Versiones
+    description: Operaciones relacionadas con la gestión de versiones de documentos
+  - name: Autenticación
+    description: Operaciones relacionadas con la autenticación y autorización de usuarios
