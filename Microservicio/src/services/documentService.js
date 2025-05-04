@@ -10,7 +10,9 @@ class DocumentService {
       }
       return response.data.documentos;
     } catch (error) {
-      console.error(`Error al consumir: ${error.message}`);
+      if (error.response) {
+        throw new Error(`Error ${error.response.status}: ${error.response.statusText}`);
+      }
       throw error;
     }
   }
