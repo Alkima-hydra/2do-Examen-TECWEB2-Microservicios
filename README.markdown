@@ -6,7 +6,7 @@ Este microservicio, desarrollado para el módulo MIGA, proporciona una interfaz 
 
 ### Objetivo
 
-Construir un microservicio para que usuarios MIGA puedan consultar y filtrar documentos normativos del proyecto integrador, así como generar informes en formato PDF basados en criterios de búsqueda específicos.
+Construir un microservicio para que usuarios MIGA puedan consultar y filtrar documentos normativos del proyecto integrador para poder generar informes en formato PDF basados en criterios de búsqueda específicos.
 
 ### Tecnologías Utilizadas
 
@@ -187,6 +187,9 @@ Permite descargar los informes PDF generados.
 **Notas**:
 - Los archivos PDF están disponibles durante 1 hora después de su generación.
 - Asegúrate de usar el nombre de archivo exacto retornado por `generarReportePDF`.
+
+## Pruebas
+- Se realizaron pruebas tanto en Postman como en GraphQL Playground
 
 ### Herramientas de Prueba
 
