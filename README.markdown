@@ -196,46 +196,33 @@ Permite descargar los informes PDF generados.
 
 ## Estructura de Archivos
 
-La estructura del proyecto refleja una organización modular basada en la imagen proporcionada:
+La estructura del proyecto refleja una organización modular y clara:
 
+```
 /Microservicio
-├── node_modules/
-├── src/
-│   ├── assets/
-│   │   └── miga-24.png
-│   ├── config/
-│   │   └── index.js
-│   ├── controllers/
-│   │   └── downloadController.js
-│   ├── graphql/
-│   │   ├── resolvers.js
-│   │   └── schema.js
-│   ├── services/
-│   │   └── documentService.js
-│   ├── utils/
-│   │   └── pdfGenerator.js
-│   └── index.js
-├── Uploads/
-│   └── reporte_documentos_174.pdf
-├── .env
-├── .gitignore
-├── package-lock.json
-└── package.json
-
-- **node_modules/**: Dependencias instaladas por npm (excluido en `.gitignore`).
-- **src/assets/miga-24.png**: Imagen utilizada como logo en los informes PDF.
-- **src/config/index.js**: Configuración de variables de entorno (`PORT`, `REST_API_URL`).
-- **src/controllers/downloadController.js**: Lógica para servir archivos PDF desde el endpoint `/download`.
-- **src/graphql/resolvers.js**: Implementa la lógica de las consultas (`documentos`) y mutaciones (`generarReportePDF`).
-- **src/graphql/schema.js**: Define el esquema GraphQL con tipos (`Document`, `PDFGenerationResponse`) y operaciones.
-- **src/services/documentService.js**: Encapsula el consumo de la API REST y el filtrado de documentos.
-- **src/utils/pdfGenerator.js**: Genera informes PDF con PDFKit, incluyendo tablas y estilos.
-- **src/index.js**: Punto de entrada que inicializa el servidor Express y Apollo Server.
-- **Uploads/**: Directorio temporal para almacenar PDFs generados.
-- **.env**: Archivo de configuración de entorno (excluido en `.gitignore`).
-- **.gitignore**: Lista de archivos y carpetas a ignorar en el control de versiones.
-- **package-lock.json**: Registro de versiones exactas de las dependencias.
-- **package.json**: Configuración del proyecto, incluyendo dependencias y scripts.
+├── node_modules/                # Dependencias instaladas por npm (excluido en .gitignore)
+├── src/                         # Código fuente del microservicio
+│   ├── assets/                  # Recursos estáticos como imágenes
+│   │   └── miga-24.png          # Logo utilizado en los informes PDF
+│   ├── config/                  # Configuración del proyecto
+│   │   └── index.js             # Configuración de variables de entorno
+│   ├── controllers/             # Controladores para manejar la lógica de las rutas
+│   │   └── downloadController.js # Lógica para servir archivos PDF desde el endpoint /download
+│   ├── graphql/                 # Definición y lógica de la API GraphQL
+│   │   ├── resolvers.js         # Implementación de consultas y mutaciones
+│   │   └── schema.js            # Esquema GraphQL con tipos y operaciones
+│   ├── services/                # Servicios para encapsular lógica de negocio
+│   │   └── documentService.js   # Consumo de la API REST y filtrado de documentos
+│   ├── utils/                   # Utilidades y funciones auxiliares
+│   │   └── pdfGenerator.js      # Generación de informes PDF con PDFKit
+│   └── index.js                 # Punto de entrada del servidor Express y Apollo Server
+├── Uploads/                     # Directorio temporal para almacenar PDFs generados
+│   └── reporte_documentos_174.pdf # Ejemplo de un informe PDF generado
+├── .env                         # Archivo de configuración de entorno (excluido en .gitignore)
+├── .gitignore                   # Lista de archivos y carpetas a ignorar en el control de versiones
+├── package-lock.json            # Registro de versiones exactas de las dependencias
+└── package.json                 # Configuración del proyecto, incluyendo dependencias y scripts
+```
 
 ## Endpoint Externo
 
