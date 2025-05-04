@@ -3,46 +3,25 @@ const pdfGenerator = require('../../utils/pdfGenerator');
 
 module.exports = {
   Query: {
-    documentos: async () => {
+    documentos: async (_, { filter = {} }) => {
       try {
-        const documentos = await documentService.getAllDocuments();
+        const documentos = await documentService.getFilteredDocuments(filter);
         return documentos;
       } catch (error) {
-        throw new Error(`Error al consumir documentos: ${error.message}`);
-      }
-    },
-    documentosPorTipo: async (_, { tipo }) => {
-      try {
-        const documentos = await documentService.getDocumentsByType(tipo);
-        return documentos;
-      } catch (error) {
-        throw new Error(`Error al consumir documentos por tipo: ${error.message}`);
-      }
-    },
-    documentosPorAnio: async (_, { anio }) => {
-      try {
-        const documentos = await documentService.getDocumentsByYear(anio);
-        return documentos;
-      } catch (error) {
-        throw new Error(`Error al consumir documentos por fecha: ${error.message}`);
-      }
-    },
-    reporteConsultas: async () => {
-      try {
-        const documentos = await documentService.getQueryReport();
-        return documentos;
-      } catch (error) {
-        throw new Error(`Error al consumir las consultas de reportes: ${error.message}`);
+        throw new Error(`Error al consultar documentos: ${error.message}`);
       }
     },
   },
   Mutation: {
-    generarReportePDF: async (_, { tipo, anio }) => {
+    generarReportePDF: async (_, { filter = {} }) => {
       try {
-        const fileName = await pdfGenerator.generatePDFReport(tipo, anio);
+        // Filtramos documentos
+        const documentos = await documentService.getFilteredDocuments(filter);
+        
+        const fileName = await pdfGenerator.generatePDFReport(documentos);
         return fileName;
       } catch (error) {
-        throw new Error(`Error al generar pdf: ${error.message}`);
+        throw new Error(`Error al generar PDF: ${error.message}`);
       }
     },
   },

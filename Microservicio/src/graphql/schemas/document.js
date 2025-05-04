@@ -30,15 +30,17 @@ const documentSchema = gql`
     usuario: User
   }
 
-  type Query {
-    documentos: [Document]
-    documentosPorTipo(tipo: String!): [Document]
-    documentosPorAnio(anio: Int!): [Document]
-    reporteConsultas: [Document]
+  input DocumentFilter {
+    tipo: String
+    anio: Int
+    orderBy: String
+    orderDirection: String
   }
-
+  type Query {
+    documentos(filter: DocumentFilter): [Document]
+  }
   type Mutation {
-    generarReportePDF(tipo: String, anio: Int): String
+    generarReportePDF(filter: DocumentFilter): String
   }
 `;
 
