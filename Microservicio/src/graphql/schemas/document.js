@@ -39,8 +39,16 @@ const documentSchema = gql`
   type Query {
     documentos(filter: DocumentFilter): [Document]
   }
+  type PDFGenerationResponse {
+    fileName: String!
+    downloadUrl: String!
+  }
+
   type Mutation {
-    generarReportePDF(filter: DocumentFilter): String
+    generarReportePDF(
+      filter: DocumentFilter, 
+      fields: [String]
+    ): PDFGenerationResponse
   }
 `;
 

@@ -12,17 +12,25 @@ module.exports = {
       }
     },
   },
-  Mutation: {
-    generarReportePDF: async (_, { filter = {} }) => {
+  Mutation : {
+    generarReportePDF: async (_, { filter = {}, fields = null }) => {
       try {
-        // Filtramos documentos
         const documentos = await documentService.getFilteredDocuments(filter);
         
-        const fileName = await pdfGenerator.generatePDFReport(documentos);
-        return fileName;
+        const options = {
+          fields: fields || ['id_documento', 'nombre','tipo','fuente_origen', 'anio_publicacion','aplicacion', 'vistas']
+        };
+        
+        const result = await pdfGenerator.generatePDFReport(documentos, options, filter);
+        
+        return {
+          fileName: result.fileName,
+          downloadUrl: result.downloadUrl
+        };
       } catch (error) {
+        console.error(`Error al generar PDF: ${error.message}`);
         throw new Error(`Error al generar PDF: ${error.message}`);
       }
     },
-  },
+  }
 };
